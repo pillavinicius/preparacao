@@ -270,7 +270,16 @@ document.addEventListener("input",function(e){var f=e.target.getAttribute&&e.tar
 var h=(location.hash||"").replace("#","");if(V[h])cur=h;
 window.addEventListener("hashchange",function(){var x=location.hash.replace("#","");if(V[x]&&x!==cur){cur=x;render();}});
 render();
-if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("sw.js").catch(function(){});}
+(function(){var el=document.getElementById("hdrsub");var base="2 adultos · 2 crianças (4 anos) · bebê (6 meses)";
+function st(m,c){el.innerHTML=base+'<br><span style="color:'+c+'">'+m+'</span>';}
+if(!("serviceWorker" in navigator)||!(location.protocol==="https:"||location.hostname==="localhost")){st("Modo offline indisponível neste endereço","#e05a4f");return;}
+st("Preparando modo offline…","#e8a33d");
+navigator.serviceWorker.register("sw.js",{scope:"./"}).catch(function(){st("Falha ao ativar modo offline","#e05a4f");});
+navigator.serviceWorker.ready.then(function(){return caches.open("prep-v2");}).then(function(c){return c.match("./index.html");}).then(function(r){
+ if(r&&navigator.serviceWorker.controller)st("✓ Pronto para uso offline","#4fb477");
+ else if(r)st("Quase lá: feche e abra o app mais uma vez","#e8a33d");
+}).catch(function(){});
+})();
 })();
 </script>
 </body>
