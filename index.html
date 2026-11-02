@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14171c">
+<title>Plano de Preparação Familiar</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Preparação">
+<style>
+:root{
+  --bg:#14171c;--card:#1d2128;--card2:#252a33;--line:#323844;
+  --tx:#eef1f5;--mut:#9aa3b2;--acc:#e8a33d;--ok:#4fb477;--warn:#e8a33d;--bad:#e05a4f;--org:#e57c3a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top) + 12px) 16px 8px;border-bottom:1px solid var(--line)}
+header h1{font-size:17px;margin:0 0 2px;letter-spacing:.2px}
+header .sub{font-size:12px;color:var(--mut)}
+main{padding:14px 14px calc(env(safe-area-inset-bottom) + 90px);max-width:720px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:6;display:flex;background:#0f1216;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;color:var(--mut);font-size:11px;padding:9px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+nav button.on{color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h2{font-size:16px;margin:0 0 4px}
+.card h3{font-size:14px;margin:12px 0 6px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+.muted{color:var(--mut);font-size:13px}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.big{font-size:30px;font-weight:700;line-height:1.1}
+.bar{height:8px;background:var(--card2);border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:6px;transition:width .3s}
+.bar.ok i{background:var(--ok)}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;background:var(--card2);color:var(--mut)}
+.pill.late{background:#4a2420;color:#ff9a90}
+.pill.soon{background:#4a3a1c;color:#ffcf7a}
+.pill.done{background:#1f3b2b;color:#8be0ac}
+.item{display:flex;gap:12px;align-items:flex-start;padding:11px 2px;border-top:1px solid var(--line);cursor:pointer;user-select:none}
+.item:first-of-type{border-top:0}
+.box{flex:0 0 24px;height:24px;border:2px solid #5a6375;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.item.on .box{background:var(--ok);border-color:var(--ok)}
+.item.on .box:after{content:"";width:6px;height:11px;border:solid #0f1216;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item.on .t{color:var(--mut);text-decoration:line-through}
+.t{font-size:15px}
+.q{font-size:12.5px;color:var(--mut);margin-top:2px}
+.cost{margin-left:auto;font-size:13px;color:var(--mut);white-space:nowrap;padding-left:8px}
+details{border-top:1px solid var(--line)}
+details:first-of-type{border-top:0}
+summary{list-style:none;padding:12px 0;display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer}
+summary::-webkit-details-marker{display:none}
+summary .chev{margin-left:auto;transition:transform .2s;color:var(--mut)}
+details[open] summary .chev{transform:rotate(90deg)}
+.lvl{border-left:5px solid;padding-left:12px}
+.lvl.y{border-color:#e8c53d}.lvl.o{border-color:var(--org)}.lvl.r{border-color:var(--bad)}
+.lvl b{display:block;margin-bottom:4px}
+.lvlbtn{display:flex;gap:8px;margin-top:8px}
+.lvlbtn button{flex:1;padding:10px 4px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--tx);font-weight:600;font-size:13px}
+.lvlbtn button.on.g{background:#1f3b2b;border-color:var(--ok)}
+.lvlbtn button.on.y{background:#463d14;border-color:#e8c53d}
+.lvlbtn button.on.o{background:#4a2d17;border-color:var(--org)}
+.lvlbtn button.on.r{background:#4a2420;border-color:var(--bad)}
+label.f{display:block;font-size:12px;color:var(--mut);margin:10px 0 4px}
+input,textarea{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:10px;font:inherit;font-size:15px}
+textarea{min-height:80px;resize:vertical}
+.btn{display:inline-block;background:var(--acc);color:#1a1205;border:0;border-radius:10px;padding:11px 14px;font-weight:700;font-size:14px}
+.btn.sec{background:var(--card2);color:var(--tx);border:1px solid var(--line)}
+.warn{background:#3a2220;border:1px solid #6b302a;border-radius:12px;padding:12px;font-size:14px}
+ul.g{margin:6px 0 0;padding-left:18px}
+ul.g li{margin:5px 0}
+.stat{flex:1;background:var(--card2);border-radius:12px;padding:10px}
+.stat .n{font-size:20px;font-weight:700}
+.stat .l{font-size:11px;color:var(--mut)}
+.hidden{display:none}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#000c;padding:8px 14px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <h1>Plano de Preparação Familiar</h1>
+  <div class="sub" id="hdrsub">2 adultos · 2 crianças (4 anos) · bebê (6 meses)</div>
+</header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+var KEY="prep-familia-v1";
+var mem={checks:{},level:"g",fam:{}};
+var store=null;
+try{var t="__t";localStorage.setItem(t,t);localStorage.removeItem(t);store=localStorage;}catch(e){store=null;}
+function load(){try{if(store){var s=store.getItem(KEY);if(s){var d=JSON.parse(s);mem.checks=d.checks||{};mem.level=d.level||"g";mem.fam=d.fam||{};}}}catch(e){}}
+function save(){try{if(store)store.setItem(KEY,JSON.stringify(mem));}catch(e){}}
+load();
+
+var PH=[
+{id:"f1",n:"Fase 1 — Crítico",due:"2026-11-04",note:"O que acaba primeiro e não tem substituto.",items:[
+["Fórmula infantil (mesma marca)","7 latas de 800 g",600],
+["Fraldas + lenços + pomada","~220 fraldas, 10 pacotes de lenços",450],
+["Cereal infantil + papinhas","4 latas + 30 potes",350],
+["Remédios contínuos + kit primeiros socorros","30 dias + kit (doses: pediatra/bula)",400],
+["Botijão de gás reserva (cheio)","1 × 13 kg",380],
+["Água (galão + água)","14 × 20 L",600],
+["Powerbanks 20.000 mAh","3 unidades",450],
+["Rádio AM/FM a pilha + pilhas","1 + 24 pilhas",150],
+["Tanque do carro cheio","manter acima da metade",0],
+["Sacar R$ 1.500 em notas pequenas","reserva, não é gasto",0],
+["Cadastrar CEP no SMS 40199","alertas da Defesa Civil",0],
+["Imprimir contatos e receitas","guardar na pasta de documentos",0]]},
+{id:"f2",n:"Fase 2 — Estoque e comunicação",due:"2026-11-15",note:"Despensa de 30 dias (aba Compras) e internet independente.",items:[
+["Despensa 30 dias","ver aba Compras",3000],
+["Higiene e limpeza","ver aba Compras",500],
+["Starlink Mini","antena; plano R$ 179/mês. Ativar e testar",649],
+["Nobreak roteador/modem","600–800 VA",500],
+["Filtro de água gravitacional","para quando a água estocada acabar",300],
+["Walkie-talkies homologados Anatel","1 par, 1–3 km",300],
+["Chip de 2ª operadora","eSIM pré-pago",30],
+["Contas em 2 bancos diferentes","cartão de cada",0],
+["Imprimir códigos de backup 2FA","e-mail, bancos, corretoras",0]]},
+{id:"f3",n:"Fase 3 — Energia",due:"2026-11-30",note:"Black Friday 27/11 cai aqui.",items:[
+["Gerador inverter 3,5 kW","ex.: Toyama TG3500iSXP",4750],
+["3 galões homologados 20 L + 60 L gasolina","+ estabilizador de combustível",700],
+["Detector de monóxido de carbono + extintor ABC","obrigatório com gerador",300],
+["Extensão bitola grossa","20 m, 4 mm²",200],
+["Chave reversora (eletricista)","só se for ligar no quadro da casa",0],
+["Opcional: estação de energia ~1 kWh","ex.: EcoFlow Delta 3",6350],
+["Opcional: painel solar 200 W","recarrega a estação",1500]]},
+{id:"f4",n:"Fase 4 — Reforço",due:"2026-12-20",note:"Discrição, segurança e treino.",items:[
+["Iluminação solar com sensor","4–6 luminárias",300],
+["Cadeados e corrente","gerador e galões",200],
+["Pasta de documentos","cópias + pendrive criptografado",100],
+["Simulado 24 h sem energia","desligar disjuntor geral, anotar o que faltou",0],
+["Combinar apoio mútuo com 1–2 vizinhos","água, energia, vigilância",0]]}
+];
+
+var BUY=[
+["Água",[["Galões 20 L","14 (~280 L)"],["Água mineral para o bebê","30 L"]]],
+["Grãos e massas",[["Arroz","15 kg"],["Feijão","7 kg"],["Macarrão","8 kg"],["Farinha de trigo","2 kg"],["Fubá","2 kg"],["Farinha de mandioca","2 kg"],["Aveia","3 kg"],["Biscoitos (cream cracker/maizena)","15 pacotes"]]],
+["Proteínas",[["Atum","15 latas"],["Sardinha","15 latas"],["Carne/salsicha em conserva","10 latas"],["Ovos","90"],["Proteína de soja","1 kg"],["Pasta de amendoim","2 potes"],["Castanhas","1 kg"]]],
+["Laticínios",[["Leite UHT","36 caixas"],["Leite em pó integral","1,6 kg"]]],
+["Enlatados e molhos",[["Milho","10"],["Ervilha","10"],["Molho de tomate","10"],["Extrato de tomate","5"]]],
+["Hortifrúti duráveis",[["Batata","8 kg"],["Cebola","4 kg"],["Alho","1 kg"],["Cenoura","3 kg"],["Abóbora","2 inteiras"],["Maçã","5 kg"],["Laranja","6 kg"]]],
+["Básicos",[["Óleo","4 L"],["Açúcar","5 kg"],["Sal","1 kg"],["Café","2 kg"],["Vinagre e temperos secos","—"],["Margarina","2"]]],
+["Crianças de 4 anos",[["Achocolatado","2 latas"],["Suco concentrado","6 garrafas"],["Gelatina","10"],["Frutas secas, compotas, lanches favoritos","—"],["Fralda noturna (se usar)","2 pacotes"]]],
+["Bebê de 6 meses",[["Fórmula (mesma marca)","7 latas 800 g"],["Cereal infantil","4 latas"],["Papinhas prontas","30–60 potes"],["Fraldas (parte no tamanho seguinte)","~220"],["Lenço umedecido","10 pacotes"],["Pomada","2"],["Sabonete infantil","1"],["Detergente neutro + escova de mamadeira","1 + 1"]]],
+["Saúde",[["Remédios contínuos","30+ dias"],["Antitérmico infantil e adulto","o indicado pelo pediatra"],["Soro de reidratação oral","10 envelopes"],["Termômetro","1"],["Curativos, antisséptico, repelente","—"]]],
+["Higiene e limpeza",[["Papel higiênico","48 rolos"],["Sabonete","10"],["Pasta de dente","4"],["Shampoo","2"],["Absorventes","—"],["Detergente","6"],["Sabão em pó","2 kg"],["Água sanitária","2 L"],["Álcool 70%","1 L"],["Sacos de lixo","—"]]],
+["Energia e emergência",[["Lanternas","2"],["Pilhas","—"],["Velas e fósforos","—"],["Carregador veicular","1"]]]
+];
+
+var LV=[
+{k:"y",n:"Amarelo",g:"Ataque ao Irã confirmado; Brent > US$ 120; nota de Abrava, CNTTL ou CNTA com data de greve.",a:["Completar a fase em andamento em até 24 h","Tanque cheio","Testar gerador e Starlink","Carregar todas as baterias"]},
+{k:"o",n:"Laranja",g:"Filas em postos; bloqueios confirmados pela PRF; mercados limitando compras.",a:["Parar compras grandes e usar o estoque","Reduzir deslocamentos","Manter carro abastecido e pronto","Confirmar ponto de encontro com a família"]},
+{k:"r",n:"Vermelho",g:"Apagão acima de 12 h; bancos ou telecom fora do ar.",a:["Gerador 4–6 h/dia (geladeira, carregadores)","Starlink + rádio para informação","Comunicação por SMS e walkie-talkie","Usar dinheiro vivo","Cortinas fechadas à noite, discrição"]}
+];
+
+var GUIDE=[
+["Gerador — segurança",["Só ao ar livre, a pelo menos 6 m de portas e janelas. Nunca na garagem: o monóxido de carbono mata em minutos.","Nunca ligar o gerador numa tomada da casa. Para ligar no quadro, um eletricista precisa instalar uma chave reversora; sem ela, a energia volta pela rede e pode eletrocutar quem estiver na linha.","Abastecer só com o motor desligado e frio.","Rodar 4–6 h/dia: a geladeira mantém o frio com a porta fechada.","Testar 20 min por mês. Trocar a gasolina a cada 3–6 meses (usar no carro)."]],
+["Água",["Consumo: ~9 L/dia para a família (beber e cozinhar).","A fórmula do bebê vai só com água mineral ou fervida.","Purificar água duvidosa: ferver 1 min, ou usar o filtro, ou água sanitária SEM perfume conforme o rótulo (gotas por litro, esperar 30 min)."]],
+["Geladeira sem energia",["Fechada, mantém o frio por ~4 h; o freezer cheio, por ~24–48 h.","Consumir primeiro o que é perecível, depois o freezer, por último a despensa.","Ligar o gerador em blocos de 2–3 h."]],
+["Comunicação sem internet",["SMS funciona com rede fraca: prefira SMS a ligações.","Rádio AM/FM: informações oficiais da Defesa Civil.","Walkie-talkie: combinar canal e horário fixo (ex.: canal 3, de hora em hora).","Starlink precisa de energia: Mini ~25–40 W, roda em estação ou powerbank USB-C PD 100 W."]],
+["Bebê",["Manter a mesma fórmula; trocar de marca pode causar problema intestinal.","Febre em bebê de 6 meses: procurar atendimento. Ter sempre combustível para ir ao pronto-socorro.","Soro de reidratação em diarreia; dose conforme pediatra ou bula."]],
+["Dinheiro e dados",["Dinheiro vivo em notas pequenas.","Extratos de bancos e corretoras salvos em PDF e impressos.","Códigos de backup 2FA impressos e guardados com os documentos."]]
+];
+
+var TABS=[
+["hoje","Hoje",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
+["fases","Fases",'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>'],
+["compras","Compras",'<path d="M3 4h2l2.5 11h11L21 7H6.5"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/>'],
+["alerta","Alerta",'<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17v.5"/>'],
+["familia","Família",'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.3"/><path d="M15.5 14.3A5 5 0 0 1 21 19"/>'],
+["guia","Guia",'<path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 1-4-4z"/><path d="M5 16a4 4 0 0 1 4-4h10"/>']
+];
+var cur="hoje";
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function brl(n){return "R$ "+n.toLocaleString("pt-BR");}
+function today(){var d=new Date();d.setHours(0,0,0,0);return d;}
+function days(iso){var p=iso.split("-");var d=new Date(+p[0],p[1]-1,+p[2]);return Math.round((d-today())/864e5);}
+function fdate(iso){var p=iso.split("-");return p[2]+"/"+p[1];}
+function phStat(ph){var done=0,tot=ph.items.length,cd=0,ct=0;ph.items.forEach(function(it,i){var k=ph.id+"-"+i;var on=!!mem.checks[k];if(on)done++;if(it[0].indexOf("Opcional")!==0){ct+=it[2];if(on)cd+=it[2];}});return{done:done,tot:tot,cd:cd,ct:ct};}
+function duePill(ph,st){if(st.done===st.tot)return '<span class="pill done">Concluída</span>';var d=days(ph.due);if(d<0)return '<span class="pill late">Atrasada '+(-d)+'d</span>';if(d<=3)return '<span class="pill soon">'+(d===0?"Hoje":d+"d")+'</span>';return '<span class="pill">'+fdate(ph.due)+' · '+d+'d</span>';}
+function itemHTML(k,t,q,c){var on=!!mem.checks[k];return '<div class="item'+(on?" on":"")+'" data-k="'+k+'"><div class="box"></div><div><div class="t">'+esc(t)+'</div>'+(q?'<div class="q">'+esc(q)+'</div>':"")+'</div>'+(c?'<div class="cost">'+brl(c)+'</div>':"")+'</div>';}
+
+function vHoje(){
+  var all=0,dn=0,cd=0,ct=0,next=null;
+  PH.forEach(function(p){var s=phStat(p);all+=s.tot;dn+=s.done;cd+=s.cd;ct+=s.ct;if(!next&&s.done<s.tot)next=p;});
+  var pct=Math.round(dn/all*100);
+  var lv={g:["Normal","Sem gatilho ativo"],y:["Amarelo","Completar fase em 24 h"],o:["Laranja","Usar estoque, reduzir saídas"],r:["Vermelho","Modo crise"]}[mem.level];
+  var h='<div class="card"><div class="row between"><div><div class="muted">Progresso geral</div><div class="big">'+pct+'%</div></div><div style="text-align:right"><div class="muted">Nível de alerta</div><div style="font-weight:700;font-size:18px">'+lv[0]+'</div><div class="muted">'+lv[1]+'</div></div></div><div class="bar'+(pct===100?" ok":"")+'"><i style="width:'+pct+'%"></i></div>';
+  h+='<div class="row" style="margin-top:10px"><div class="stat"><div class="n">'+dn+'/'+all+'</div><div class="l">itens feitos</div></div><div class="stat"><div class="n">'+brl(cd)+'</div><div class="l">de '+brl(ct)+' (essencial)</div></div></div></div>';
+  if(next){var s=phStat(next);var pend=[];next.items.forEach(function(it,i){if(!mem.checks[next.id+"-"+i])pend.push([next.id+"-"+i,it]);});
+    h+='<div class="card"><div class="row between"><h2>Próximo: '+esc(next.n)+'</h2>'+duePill(next,s)+'</div><div class="muted">'+esc(next.note)+'</div><div style="margin-top:6px">';
+    pend.slice(0,6).forEach(function(x){h+=itemHTML(x[0],x[1][0],x[1][1],x[1][2]);});
+    h+='</div>'+(pend.length>6?'<div class="muted" style="margin-top:6px">+'+(pend.length-6)+' itens na aba Fases</div>':"")+'</div>';}
+  else h+='<div class="card"><h2>Todas as fases concluídas</h2><div class="muted">Faça a rotina mensal na aba Família.</div></div>';
+  h+='<div class="card"><h2>Fases</h2>';
+  PH.forEach(function(p){var s=phStat(p);var pc=Math.round(s.done/s.tot*100);h+='<div style="margin-top:10px"><div class="row between"><span style="font-size:14px">'+esc(p.n)+'</span>'+duePill(p,s)+'</div><div class="bar'+(pc===100?" ok":"")+'"><i style="width:'+pc+'%"></i></div></div>';});
+  h+='</div>';
+  if(!store)h+='<div class="warn">Este navegador não está salvando dados: as marcações somem ao fechar. Abra o arquivo direto no Chrome/Safari.</div>';
+  return h;
+}
+function vFases(){
+  var h="";PH.forEach(function(p){var s=phStat(p);
+    h+='<div class="card"><div class="row between"><h2>'+esc(p.n)+'</h2>'+duePill(p,s)+'</div><div class="muted">Prazo '+fdate(p.due)+' · essencial '+brl(s.ct)+' · '+s.done+'/'+s.tot+'</div><div class="muted">'+esc(p.note)+'</div><div style="margin-top:6px">';
+    p.items.forEach(function(it,i){h+=itemHTML(p.id+"-"+i,it[0],it[1],it[2]);});h+='</div></div>';});
+  return h;
+}
+function vCompras(){
+  var tot=0,dn=0;BUY.forEach(function(c,ci){c[1].forEach(function(it,i){tot++;if(mem.checks["b"+ci+"-"+i])dn++;});});
+  var h='<div class="card"><div class="row between"><h2>Lista de 30 dias</h2><span class="pill'+(dn===tot?" done":"")+'">'+dn+'/'+tot+'</span></div><div class="muted">2 adultos, 2 crianças de 4 anos e bebê de 6 meses. Toque para marcar como comprado.</div><div class="bar'+(dn===tot?" ok":"")+'"><i style="width:'+Math.round(dn/tot*100)+'%"></i></div>';
+  h+='<div class="row" style="gap:8px;margin-top:8px"><button class="btn sec" id="clrBuy" style="flex:1">Limpar marcações</button></div></div><div class="card">';
+  BUY.forEach(function(c,ci){var cd=0;c[1].forEach(function(it,i){if(mem.checks["b"+ci+"-"+i])cd++;});
+    h+='<details'+(cd<c[1].length&&ci<2?" open":"")+'><summary>'+esc(c[0])+' <span class="pill'+(cd===c[1].length?" done":"")+'">'+cd+'/'+c[1].length+'</span><span class="chev">›</span></summary>';
+    c[1].forEach(function(it,i){h+=itemHTML("b"+ci+"-"+i,it[0],it[1],0);});h+='</details>';});
+  return h+'</div>';
+}
+function vAlerta(){
+  var h='<div class="card"><h2>Nível atual</h2><div class="muted">Mude o nível só com fonte oficial ou grande veículo, nunca por vídeo de rede social.</div><div class="lvlbtn">';
+  [["g","Normal"],["y","Amarelo"],["o","Laranja"],["r","Vermelho"]].forEach(function(x){h+='<button data-lv="'+x[0]+'" class="'+x[0]+(mem.level===x[0]?" on":"")+'">'+x[1]+'</button>';});
+  h+='</div></div>';
+  LV.forEach(function(l){h+='<div class="card lvl '+l.k+'"><b>'+l.n+'</b><div class="muted">Gatilho: '+esc(l.g)+'</div><ul class="g">';l.a.forEach(function(a){h+='<li>'+esc(a)+'</li>';});h+='</ul></div>';});
+  h+='<div class="card"><h2>Fontes confiáveis</h2><ul class="g"><li>Defesa Civil: SMS 40199 (cadastre o CEP)</li><li>Rádio AM/FM local</li><li>PRF (bloqueios em rodovias)</li><li>ANP / Petrobras (combustível)</li><li>Grandes veículos: Agência Brasil, Folha, Estadão, G1</li></ul></div>';
+  return h;
+}
+var FF=[["meet1","Ponto de encontro 1 (bairro)","ex.: praça em frente à igreja"],["meet2","Ponto de encontro 2 (fora da cidade)","ex.: casa dos avós em ..."],["a1","Adulto 1 — telefone",""],["a2","Adulto 2 — telefone",""],["esc","Escola/creche — telefone e endereço",""],["resp3","3º responsável autorizado — nome e telefone",""],["ped","Pediatra — telefone",""],["hosp","Pronto-socorro mais próximo",""],["viz","Vizinhos de apoio",""],["radio","Canal do walkie-talkie e horário",""],["notes","Anotações (alergias, remédios, tamanhos de fralda)",""]];
+function vFamilia(){
+  var h='<div class="card"><h2>Plano da família</h2><div class="muted">Fica salvo neste aparelho. Imprima ou anote também em papel.</div>';
+  FF.forEach(function(f){var v=mem.fam[f[0]]||"";var ta=(f[0]==="notes"||f[0]==="viz");h+='<label class="f">'+esc(f[1])+'</label>'+(ta?'<textarea data-f="'+f[0]+'" placeholder="'+esc(f[2])+'">'+esc(v)+'</textarea>':'<input data-f="'+f[0]+'" value="'+esc(v)+'" placeholder="'+esc(f[2])+'">');});
+  h+='</div><div class="card"><h2>Papéis</h2><ul class="g"><li><b>Adulto 1:</b> busca as crianças e cuida das comunicações.</li><li><b>Adulto 2:</b> bebê, água e comida.</li></ul></div>';
+  h+='<div class="card"><h2>Rotina mensal (1º domingo)</h2>';
+  [["Testar gerador 20 min"],["Revisar validades e repor estoque"],["Carregar powerbanks e estação"],["Ligar Starlink e confirmar conexão"],["Trocar gasolina se tiver mais de 3–6 meses"]].forEach(function(x,i){h+=itemHTML("m-"+i,x[0],"",0);});
+  h+='<div style="margin-top:10px"><button class="btn sec" id="clrMon">Zerar rotina do mês</button></div></div>';
+  h+='<div class="card"><h2>Backup dos dados</h2><div class="muted">Copie o código para guardar ou passar para outro celular.</div><div class="row" style="gap:8px;margin-top:10px"><button class="btn sec" id="exp" style="flex:1">Gerar código</button><button class="btn sec" id="imp" style="flex:1">Importar</button></div><textarea id="bk" class="hidden" style="margin-top:10px"></textarea><button class="btn hidden" id="impGo" style="margin-top:8px">Aplicar importação</button></div>';
+  return h;
+}
+function vGuia(){
+  var h='<div class="card">';GUIDE.forEach(function(g,i){h+='<details'+(i===0?" open":"")+'><summary>'+esc(g[0])+'<span class="chev">›</span></summary><ul class="g" style="margin-bottom:12px">';g[1].forEach(function(x){h+='<li>'+esc(x)+'</li>';});h+='</ul></details>';});
+  return h+'</div><div class="muted" style="text-align:center;padding:8px">Valores são estimativas de out/nov 2026. Doses de remédio e de fórmula: pediatra ou bula.</div>';
+}
+var V={hoje:vHoje,fases:vFases,compras:vCompras,alerta:vAlerta,familia:vFamilia,guia:vGuia};
+
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("on");},1600);}
+function render(){
+  var app=document.getElementById("app");
+  var openD=[];app.querySelectorAll("details").forEach(function(d,i){if(d.open)openD.push(i);});
+  var sameTab=render._last===cur;render._last=cur;
+  app.innerHTML=V[cur]();
+  if(sameTab&&openD.length){var ds=app.querySelectorAll("details");ds.forEach(function(d){d.open=false;});openD.forEach(function(i){if(ds[i])ds[i].open=true;});}
+  var nav=document.getElementById("nav");nav.innerHTML=TABS.map(function(t){return '<button data-t="'+t[0]+'" class="'+(cur===t[0]?"on":"")+'"><svg viewBox="0 0 24 24">'+t[2]+'</svg>'+t[1]+'</button>';}).join("");
+}
+document.addEventListener("click",function(e){
+  var it=e.target.closest(".item");if(it){var k=it.getAttribute("data-k");if(mem.checks[k])delete mem.checks[k];else mem.checks[k]=1;save();var y=window.scrollY;render();window.scrollTo(0,y);return;}
+  var nb=e.target.closest("nav button");if(nb){cur=nb.getAttribute("data-t");try{history.replaceState(null,"","#"+cur);}catch(_){}render();window.scrollTo(0,0);return;}
+  var lb=e.target.closest("[data-lv]");if(lb){mem.level=lb.getAttribute("data-lv");save();render();toast("Nível atualizado");return;}
+  if(e.target.id==="clrBuy"){Object.keys(mem.checks).forEach(function(k){if(k[0]==="b")delete mem.checks[k];});save();render();toast("Lista zerada");return;}
+  if(e.target.id==="clrMon"){Object.keys(mem.checks).forEach(function(k){if(k.indexOf("m-")===0)delete mem.checks[k];});save();render();toast("Rotina zerada");return;}
+  if(e.target.id==="exp"){var bk=document.getElementById("bk");bk.classList.remove("hidden");bk.value=btoa(unescape(encodeURIComponent(JSON.stringify(mem))));bk.select();try{navigator.clipboard.writeText(bk.value).then(function(){toast("Código copiado");},function(){toast("Selecione e copie o código");});}catch(_){toast("Selecione e copie o código");}return;}
+  if(e.target.id==="imp"){var b2=document.getElementById("bk");b2.classList.remove("hidden");b2.value="";b2.placeholder="Cole aqui o código";document.getElementById("impGo").classList.remove("hidden");b2.focus();return;}
+  if(e.target.id==="impGo"){try{var d=JSON.parse(decodeURIComponent(escape(atob(document.getElementById("bk").value.trim()))));mem.checks=d.checks||{};mem.level=d.level||"g";mem.fam=d.fam||{};save();render();toast("Dados importados");}catch(_){toast("Código inválido");}return;}
+});
+document.addEventListener("input",function(e){var f=e.target.getAttribute&&e.target.getAttribute("data-f");if(f){mem.fam[f]=e.target.value;save();}});
+var h=(location.hash||"").replace("#","");if(V[h])cur=h;
+window.addEventListener("hashchange",function(){var x=location.hash.replace("#","");if(V[x]&&x!==cur){cur=x;render();}});
+render();
+if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("sw.js").catch(function(){});}
+})();
+</script>
+</body>
+</html>
